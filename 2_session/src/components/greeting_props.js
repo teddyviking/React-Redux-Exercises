@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 
 class GreetingProps extends Component {
-  propTypes: {
-    name: React.PropTypes.string.isRequired
-  }
   render(){
     let {text, user} = this.props
 
