@@ -4,21 +4,20 @@ import Counter from './counter.js';
 
 class CounterList extends Component {
   render() {
-    let counters = [];
-    let totalcounters = this.props.totalCounters;
-
-    for(let i = 0; i < totalcounters; i++) {
-      console.log(i);
-      counters.push(<Counter key={i} />);
-    }
-    console.log(counters);
-
     return (
       <div>
-        {counters}
+        {createList(this.props.totalCounters)}
       </div>
     )
   }
 }
 
+function createList (totalCounters){
+  let counters = [];
+
+  for(let i = 0; i < totalCounters; i++) {
+    counters.push(<Counter key={i} />);
+  }
+  return counters;
+}
 export default CounterList;
