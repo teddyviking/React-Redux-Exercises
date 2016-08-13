@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Greeting from './components/greeting.js';
 import GreetingProps from './components/greeting_props.js';
-import Counter from './components/counter.js'
+import Counter from './components/counter.js';
+import Clock from './components/clock.js';
+
 
 const HelloWorld = React.createClass ({
   render() {
@@ -16,6 +18,7 @@ const HelloWorld = React.createClass ({
         <Greeting />
         <GreetingProps user={user} text="You are awesome!" />
         <Counter />
+        <Clock />
       </div>
     )
   }
