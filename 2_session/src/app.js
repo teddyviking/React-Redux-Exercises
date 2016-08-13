@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Greeting from './components/Greeting.js';
 
 const HelloWorld = React.createClass ({
   render() {
     return (
       <div>
-        <h1> Hello world! </h1>
+        <Greeting />
       </div>
     )
   }
