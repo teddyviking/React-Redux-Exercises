@@ -1,16 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import moment from 'moment';
 import { extractTimeParts } from '../lib/utils';
+import Header from './header.js';
 
 
 
-const Header = ({text}) => {
-  return (
-    <div className="header">
-      <h1> {text} </h1>
-    </div>
-  );
-};
 
 const Timer = ({time}) => {
   return (
