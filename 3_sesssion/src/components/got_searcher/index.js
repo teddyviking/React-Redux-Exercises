@@ -8,16 +8,16 @@ import { characters, families, seasons } from '../../data/got';
 // Filtra los personajes a partir de una "consulta"
 function search(characters, filter){
   const nameRegEx = new RegExp(filter.name, 'i');
-  return characters.filter(c => {
+  return characters.filter(character => {
     return (
       //por nombre de personaje o actor (con expresion regular)
-      (nameRegEx.test(c.name) || nameRegEx.test(c.actor))
+      (nameRegEx.test(character.name) || nameRegEx.test(character.actor))
       //por familia
-      && (filter.family.trim() === '' || c.family === filter.family)
+      && (filter.family.trim() === '' || character.family === filter.family)
       //solo vivos
-      && (!filter.aliveOnly || c.alive)
+      && (!filter.aliveOnly || character.alive)
       //aparece en tempoadas
-      && (filter.seasons.every(s => c.seasons.includes(s)))
+      && (filter.seasons.every(s => character.seasons.includes(s)))
     );
   });
 }
@@ -40,10 +40,11 @@ class Searcher  extends Component {
   }
 
   handleQueryChange(changes){
+    console.log(changes);
     const currentFilter = this.state.filter;
     const newFilter = Object.assign({}, currentFilter, changes);
     //TODO: actualizar el filtro en el state del componente
-
+    this.setState({filter: newFilter});
   }
 
   render(){

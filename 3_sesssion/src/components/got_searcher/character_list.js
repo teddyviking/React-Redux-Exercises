@@ -4,9 +4,8 @@ import Character from './character';
 class CharacterList extends Component {
   render(){
     const { items } = this.props;
-    //TODO - generar los componentes CharacterItem
-    const characters = []
-
+    //TODO - generar los componentes CharacterItem DONE
+    const characters = items.map(character => <Character key={character.name} item={character}/>);
     return (
       <div className="search-results">
         <table>

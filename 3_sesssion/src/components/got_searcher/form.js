@@ -19,19 +19,30 @@ class Form extends Component {
   handleTextChange(e){
     //TODO - notificar el cambio en el texto del input nombre
     //o en el select familia
-
+    this.notifyChange({
+      [e.target.id]: e.target.value
+    });
   }
 
   handleAliveChange(e){
     //TODO - notificar el cambio en el bool
-
+    this.notifyChange({
+      aliveOnly: e.target.checked
+    });
   }
 
   handleSeasonChange(e){
     //TODO - notificar temporada seleccionada
     //enviando el array completo CON o SIN la temporada
     //modificada
-
+    let season = parseInt(e.target.value);
+    let currentSeasons = this.props.filter.seasons;
+    let newSeasons = e.target.checked ?
+      [season].concat(currentSeasons) :
+      currentSeasons.filter(s => s !== season)
+    this.notifyChange({
+      seasons: newSeasons
+    })
   }
 
   renderSeasons(allSeasons, currentSeasons){
