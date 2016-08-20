@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import Header from './header.js';
 
+const FILTERS = {
+  ALL: 'Todos',
+  PENDING: 'Active',
+  DONE: 'Completed'
+}
+
 const TaskForm = ({value, placeholder, onChange, onKeyUp}) => {
   return(
     <div className="row">
@@ -15,8 +21,9 @@ const TaskForm = ({value, placeholder, onChange, onKeyUp}) => {
   );
 };
 
-const TaskList = ({tasks, onTaskClick}) => {
+const TaskList = ({tasks, filter, onTaskClick}) => {
   let list = [];
+  tasks = _filterTasks(tasks, filter);
   for(let taskIndex in tasks){
     let task = tasks[taskIndex];
     list.push(
@@ -38,6 +45,18 @@ const TaskList = ({tasks, onTaskClick}) => {
   );
 };
 
+function _filterTasks(tasks, filter) {
+  return tasks.filter(task => {
+    let result = true;
+    if (filter === FILTERS.PENDING) {
+      result = !task.completed
+    } else if (filter === FILTERS.DONE) {
+      result = task.completed
+    }
+    return result;
+  });
+}
+
 const Task = ({id, description, completed, onClick}) => {
   let decoration;
   completed ? decoration = 'line-through' : decoration = 'none';
@@ -52,12 +71,29 @@ const Task = ({id, description, completed, onClick}) => {
   );
 };
 
-const NavBar = () => {
+const NavBar = ({filter, onClick}) => {
+  let links = [];
+  for (let message in FILTERS) {
+    links.push(
+      <FilterLink key={message} text={FILTERS[message]} filter={filter} onClick={onClick}/>
+    );
+  }
   return(
     <div className="row">
-      <a href="#" style={{textDecoration: 'none', color: 'rgb(0, 0, 0)'}}>Todos</a> |
-      <a href="#">Active</a>|
-      <a href="#">Completed</a>
+      {links}
+    </div>
+  )
+}
+
+const activeStyle = {
+  textDecoration: 'none',
+  color: 'rgb(0, 180, 0)'
+};
+
+const FilterLink = ({text, filter, onClick}) => {
+  return(
+    <div>
+      <a href="#" style={text===FILTERS[filter] ? activeStyle : {}} onClick={() => onClick(text)}>{text}</a> |
     </div>
   )
 }
@@ -72,6 +108,7 @@ class Todo extends Component {
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleTaskClick = this.handleTaskClick.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
   }
 
   handleChange(event) {
@@ -89,15 +126,20 @@ class Todo extends Component {
       let newTaskList = [newTask].concat(this.state.taskList);
       this.setState({
         newTask: '',
-        taskList: newTaskList
+        taskList: newTaskList,
+        filter: FILTERS.ALL
       });
     }
   }
+
   handleTaskClick(index) {
-    event.preventDefault();
     let task = this.state.taskList[index];
     task.completed = !task.completed;
     this.setState({taskList: this.state.taskList});
+  }
+
+  handleFilter(filter) {
+    this.setState({filter: filter})
   }
 
   render() {
@@ -112,9 +154,10 @@ class Todo extends Component {
         />
         <TaskList
           tasks={this.state.taskList}
+          filter={this.state.filter}
           onTaskClick={this.handleTaskClick}
         />
-        <NavBar />
+        <NavBar onClick={this.handleFilter} filter={this.state.filter}/>
       </div>
     );
   }
