@@ -4,8 +4,6 @@ import { extractTimeParts } from '../lib/utils';
 import Header from './header.js';
 
 
-
-
 const Timer = ({time}) => {
   return (
     <div className="timer">
