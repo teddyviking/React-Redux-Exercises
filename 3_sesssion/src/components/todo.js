@@ -15,10 +15,19 @@ const TaskForm = ({value, placeholder, onChange, onKeyUp}) => {
   );
 };
 
-const TaskList = ({tasks}) => {
+const TaskList = ({tasks, onTaskClick}) => {
   let list = [];
   for(let taskIndex in tasks){
-    list.push(<Task description={tasks[taskIndex]} key={taskIndex} />)
+    let task = tasks[taskIndex];
+    list.push(
+      <Task
+        description={task.description}
+        completed={task.completed}
+        key={taskIndex}
+        id={taskIndex}
+        onClick={onTaskClick}
+      />
+    );
   }
   return(
     <div className="row">
@@ -29,12 +38,17 @@ const TaskList = ({tasks}) => {
   );
 };
 
-const Task = ({description, completed}) => {
+const Task = ({id, description, completed, onClick}) => {
   let decoration;
   completed ? decoration = 'line-through' : decoration = 'none';
 
   return(
-    <li style={{textDecoration: decoration}}>{description}</li>
+    <li
+      style={{textDecoration: decoration}}
+      onClick={() => onClick(id)}
+    >
+      {description}
+    </li>
   );
 };
 
@@ -57,6 +71,7 @@ class Todo extends Component {
     };
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleTaskClick = this.handleTaskClick.bind(this);
   }
 
   handleChange(event) {
@@ -67,13 +82,22 @@ class Todo extends Component {
   handleKeyUp(event) {
     event.preventDefault();
     if(event.keyCode === 13){
-      let newTask = event.target.value;
+      let newTask = {
+        description: event.target.value,
+        completed: false
+      };
       let newTaskList = [newTask].concat(this.state.taskList);
       this.setState({
         newTask: '',
         taskList: newTaskList
       });
     }
+  }
+  handleTaskClick(index) {
+    event.preventDefault();
+    let task = this.state.taskList[index];
+    task.completed = !task.completed;
+    this.setState({taskList: this.state.taskList});
   }
 
   render() {
@@ -84,8 +108,12 @@ class Todo extends Component {
           value={this.state.newTask}
           placeholder="Add a new task"
           onChange={this.handleChange}
-          onKeyUp={this.handleKeyUp}/>
-        <TaskList tasks={this.state.taskList}/>
+          onKeyUp={this.handleKeyUp}
+        />
+        <TaskList
+          tasks={this.state.taskList}
+          onTaskClick={this.handleTaskClick}
+        />
         <NavBar />
       </div>
     );
